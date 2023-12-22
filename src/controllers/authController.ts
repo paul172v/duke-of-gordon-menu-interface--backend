@@ -293,9 +293,10 @@ export const resetPassword = async (
     employee.password = req.body.password;
     employee.passwordResetToken = undefined;
     employee.passwordResetExpires = undefined;
-    await employee.save();
 
     // 3) Update changedPasswordAt property for current employee
+    employee.passwordChangedAt = new Date(Date.now());
+    await employee.save();
 
     // 4) Log the employee in, send JWT to client
     const token = jwt.sign(

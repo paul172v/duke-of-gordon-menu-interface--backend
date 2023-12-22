@@ -1,5 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import morgan from "morgan";
+import globalErrorHandler from "./controllers/errorController";
+import AppError from "./utils/appError";
 
 const app = express();
 
@@ -23,5 +25,11 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 import employeeRouter from "./routes/employeeRoutes";
 
 app.use("/api/v1/employees", employeeRouter);
+
+app.all("*", (req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
+});
+
+app.use(globalErrorHandler);
 
 export default app;

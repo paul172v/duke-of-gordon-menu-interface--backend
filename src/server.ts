@@ -3,6 +3,12 @@ dotenv.config({ path: "./config.env" });
 import app from "./app";
 import mongoose from "mongoose";
 
+process.on("uncaughtException", (err) => {
+  console.log(`❗Uncaught Exception! Shutting down!`);
+  console.log(`❌ ${err}`);
+  process.exit(1);
+});
+
 const dbURL = process.env.DB_URL;
 const dbPassword = process.env.DB_PASSWORD;
 
@@ -21,4 +27,12 @@ mongoose
   });
 
 const port = process.env.PORT || 5000;
-app.listen(port, () => console.log(`Listening on port ${port}`));
+const server = app.listen(port, () => console.log(`Listening on port ${port}`));
+
+process.on("unhandledRejection", (err) => {
+  console.log(`❗Unhandled Rejection! Shutting down!`);
+  console.log(`❌ ${err}`);
+  server.close(() => {
+    process.exit(1);
+  });
+});
