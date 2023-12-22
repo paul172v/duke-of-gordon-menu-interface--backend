@@ -195,9 +195,9 @@ export const protectAndRestrictTo = (...roles: string[]) => {
     }
 
     //////
-    ///// ⚠️ Upon successful completion of this controller, what do we do next???
+    ///// ⚠️ Upon successful completion of this controller, move onto the next controller in the route
     //////
-    res.status(300).json({ status: "success", message: "finally" });
+    next();
   };
 };
 
