@@ -3,7 +3,7 @@ import nodemailer from "nodemailer";
 interface EmailOptions {
   email: string;
   subject: string;
-  message: string;
+  html: any;
 }
 
 const sendEmail = async (options: EmailOptions): Promise<void> => {
@@ -20,11 +20,10 @@ const sendEmail = async (options: EmailOptions): Promise<void> => {
 
   // 2) Define the email options
   const mailOptions = {
-    from: "Paul Harris <paul172v@aol.com>",
+    from: "No Reply <no-reply@DukeOfGordonHotel.com>",
     to: options.email,
     subject: options.subject,
-    text: options.message,
-    // html:
+    html: options.html,
   };
 
   // 3) Actually send the email with nodemailer

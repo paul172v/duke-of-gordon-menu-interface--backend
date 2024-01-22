@@ -3,11 +3,6 @@ import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
 const employeeSchema = new mongoose.Schema({
-  _id: {
-    type: String,
-    default: new mongoose.Types.ObjectId(),
-    required: [true, "Employee must have an ID"],
-  }, // Explicitly declare the _id field
   firstName: {
     type: String,
     required: [true, "Employee must have a first name"],
@@ -24,7 +19,7 @@ const employeeSchema = new mongoose.Schema({
     type: String,
     required: [true, "Employee must have a role"],
     default: "Pending",
-    enum: ["Manager", "Chef", "FOH", "Pending"],
+    enum: ["Manager", "Allowed", "Banned", "Pending"],
   },
   email: {
     type: String,
@@ -76,20 +71,12 @@ employeeSchema.methods.createPasswordResetToken = function () {
     .update(resetToken)
     .digest("hex");
 
-  /* remove when test successful */
-  // console.log(
-  //   { sentResetToken: resetToken },
-  //   { documentResetToken: this.passwordResetToken }
-  // );
-  /* ------ */
-
   this.passwordResetExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
 
   return resetToken;
 };
 
 interface IEmployee extends mongoose.Document {
-  _id: string;
   firstName: string;
   middleName: string;
   lastName: string;

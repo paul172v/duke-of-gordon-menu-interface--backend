@@ -31,14 +31,17 @@ app.use((req: Request, res: Response, next: NextFunction) => {
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
   );
-  res.header("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PATCH, DELETE, OPTIONS"
+  );
   next();
 });
 
 // Limit requests from same IP
 const limiter = rateLimit({
   // Max requests from the same IP per time window
-  max: 100,
+  max: 10000, /// ⚠️ Should be 100 but extended for testing purposes ⚠️
   // WindowM (M for milliseconds), converted to 1 hour
   windowMs: 60 * 60 * 1000,
   // Error Message
@@ -47,8 +50,10 @@ const limiter = rateLimit({
 app.use("/api", limiter);
 
 import employeeRouter from "./routes/employeeRoutes";
+import mainMenuRouter from "./routes/mainMenuRoutes";
 
 app.use("/api/v1/employees", employeeRouter);
+app.use("/api/v1/main-menu", mainMenuRouter);
 
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

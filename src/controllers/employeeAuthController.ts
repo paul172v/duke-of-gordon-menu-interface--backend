@@ -8,7 +8,7 @@ import sendEmail from "../utils/email";
 import bcrypt from "bcryptjs";
 
 //// ✅ Signup appears to be working
-export const signup = async (
+export const employeeSignUp = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -26,7 +26,7 @@ export const signup = async (
       password: password,
     });
 
-    await newEmployee.save();
+    await newEmployee.save({ validateBeforeSave: true });
 
     const token = jwt.sign(
       { employeeId: newEmployee._id },
@@ -36,7 +36,8 @@ export const signup = async (
     res.status(201).json({
       status: "success",
       message: "Employee successfully created",
-      payload: newEmployee,
+      email: newEmployee.email,
+      role: newEmployee.role,
       token: token,
     });
   } catch (err: any) {
@@ -48,7 +49,7 @@ export const signup = async (
 };
 
 ////////// ✅ Login appears to be working
-export const login = async (
+export const employeeLogin = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -85,7 +86,13 @@ export const login = async (
       }
     );
 
-    res.status(200).send({ message: "Logged in successfully", token });
+    res.status(200).send({
+      status: "success",
+      message: "Logged in successfully",
+      role: employee.role,
+      email: employee.email,
+      token,
+    });
   } catch (err: any) {
     res.status(500).json({
       status: "fail",
@@ -95,7 +102,7 @@ export const login = async (
 };
 
 ////////// ✅ Protect and restrict to
-export const protectAndRestrictTo = (...roles: string[]) => {
+export const employeeProtectAndRestrictTo = (...roles: string[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       // 1) Get token and check if it exists
@@ -103,9 +110,9 @@ export const protectAndRestrictTo = (...roles: string[]) => {
 
       if (
         req.headers.authorization &&
-        req.headers.authorization.startsWith("jwt=Bearer ")
+        req.headers.authorization.startsWith("Bearer ")
       ) {
-        const placeholder = req.headers.authorization.split("jwt=Bearer ");
+        const placeholder = req.headers.authorization.split("Bearer ");
         token = placeholder[1];
       }
 
@@ -138,7 +145,9 @@ export const protectAndRestrictTo = (...roles: string[]) => {
       const decoded = await verifyToken(token);
 
       // 3) Check if employee still exists
-      const currentEmployee = await Employee.findById(decoded.employeeId);
+      const currentEmployee = await Employee.findById(
+        JSON.stringify(decoded.employeeId) //// It is important that we stringify the data here
+      );
 
       if (!currentEmployee) {
         console.log("❌ Employee belonging to token not found");
@@ -194,15 +203,13 @@ export const protectAndRestrictTo = (...roles: string[]) => {
       }
     }
 
-    //////
-    ///// ⚠️ Upon successful completion of this controller, move onto the next controller in the route
-    //////
+    ///// Upon successful completion of this controller, move onto the next controller in the route
     next();
   };
 };
 
 ////////// ✅ Forgot Password is working, will send email with reset token
-export const forgotPassword = async (
+export const employeeForgotPassword = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -210,7 +217,6 @@ export const forgotPassword = async (
   try {
     // 1) Get user based on POSTed email
     const employee = await Employee.findOne({ email: req.body.email });
-
     if (!employee) {
       return next(
         res.status(404).json({
@@ -224,18 +230,35 @@ export const forgotPassword = async (
     const resetToken = employee.createPasswordResetToken();
     await employee.save({ validateBeforeSave: false });
 
-    // 3) Send token as email
-    const resetUrl = `${req.protocol}://${req.get(
-      "host"
-    )}/api/v1/employees/reset-password/${resetToken}`;
-
-    const message = `Forgot your password? Submit a patch request with your new password to ${resetUrl}. \n If you didn't forget your password please ignore this email. \n Your token is... ${resetToken} `;
+    // 3) Construct reset URL and HTML content with inline CSS
+    const resetUrl = `${req.protocol}://localhost:5173/reset-password/${resetToken}`;
+    const html = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Password Reset</title>
+        <style>
+            /* Add your CSS here */
+            body { font-family: Arial, sans-serif; line-height: 1.6; }
+            a { color: #007bff; text-decoration: none; }
+            p { color: #555; }
+        </style>
+    </head>
+    <body>
+        <p>Hello,</p>
+        <p>If you requested a password reset, please follow the link below:</p>
+        <a href="${resetUrl}">Reset Your Password</a>
+        <p>If you did not request a password reset, please ignore this email or contact support.</p>
+        <p>Thank you!</p>
+    </body>
+    </html>
+    `;
 
     try {
       await sendEmail({
         email: employee.email,
         subject: "Your password reset token (valid for 10mins)",
-        message,
+        html,
       });
 
       res.status(200).json({
@@ -243,6 +266,7 @@ export const forgotPassword = async (
         message: "Token sent to email",
       });
     } catch (err) {
+      // Reset the token and expiration on failure
       employee.passwordResetToken = undefined;
       employee.passwordResetExpires = undefined;
       await employee.save({ validateBeforeSave: false });
@@ -257,12 +281,13 @@ export const forgotPassword = async (
   } catch (err: any) {
     res.status(500).json({
       status: "fail",
-      message: err.message,
+      message: err.message || "Internal server error",
     });
   }
 };
 
-export const resetPassword = async (
+////////// ✅ Reset password is working, token must be included in the body
+export const employeeResetPassword = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -271,7 +296,7 @@ export const resetPassword = async (
     // 1) Get employee based on the token, check if token has expired
     const hashedToken = crypto
       .createHash("sha256")
-      .update(req.body.token) // would normally be req.params.token
+      .update(req.params.token)
       .digest("hex");
 
     const employee = await Employee.findOne({
@@ -296,7 +321,7 @@ export const resetPassword = async (
 
     // 3) Update changedPasswordAt property for current employee
     employee.passwordChangedAt = new Date(Date.now());
-    await employee.save();
+    await employee.save({ validateBeforeSave: false });
 
     // 4) Log the employee in, send JWT to client
     const token = jwt.sign(
