@@ -36,21 +36,9 @@ const mainMenuSettingsSchema = new mongoose.Schema({
     required: [true, "showDesserts must be included"],
     default: true,
   },
-  showStartersPrice: {
+  showPrices: {
     type: Boolean,
-    required: [true, "showStartersPrice must be included"],
-  },
-  showIntermediatePrice: {
-    type: Boolean,
-    required: [true, "showIntermediatePrice must be included"],
-  },
-  showMainsPrice: {
-    type: Boolean,
-    required: [true, "showMainsPrice must be included"],
-  },
-  showDessertsPrice: {
-    type: Boolean,
-    required: [true, "showDessertsPrice must be included"],
+    required: [true, "showPrices must be included"],
   },
   startersPrice: {
     type: Number,
