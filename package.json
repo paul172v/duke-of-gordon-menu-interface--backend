@@ -4,7 +4,7 @@
   "description": "A backend server for the online menu and interface for the Duke of Gordon Hotel",
   "main": "app.js",
   "scripts": {
-    "start": "server.js",
+    "start": "node server.js",
     "dev": "node --watch dist/server.js",
     "watch": "tsc -w"
   },
