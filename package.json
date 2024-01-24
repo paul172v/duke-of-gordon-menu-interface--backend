@@ -4,7 +4,8 @@
   "description": "A backend server for the online menu and interface for the Duke of Gordon Hotel",
   "main": "app.js",
   "scripts": {
-    "start": "node --watch dist/server.js",
+    "start": "server.js",
+    "dev": "node --watch dist/server.js",
     "watch": "tsc -w"
   },
   "author": "Paul Harris",
