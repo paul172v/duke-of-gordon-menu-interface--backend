@@ -52,6 +52,9 @@ app.use("/api", limiter);
 import employeeRouter from "./routes/employeeRoutes";
 import mainMenuRouter from "./routes/mainMenuRoutes";
 
+app.use("/", (req: Request, res: Response) =>
+  res.status(200).json({ status: "success", message: "Connected successfully" })
+);
 app.use("/api/v1/employees", employeeRouter);
 app.use("/api/v1/main-menu", mainMenuRouter);
 
