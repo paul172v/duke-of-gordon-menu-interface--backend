@@ -174,7 +174,7 @@ const employeeForgotPassword = async (req, res, next) => {
         const resetToken = employee.createPasswordResetToken();
         await employee.save({ validateBeforeSave: false });
         // 3) Construct reset URL and HTML content with inline CSS
-        const resetUrl = `${req.protocol}://localhost:5173/reset-password/${resetToken}`;
+        const resetUrl = `https://duke-of-gordon-menu-interface.netlify.app/reset-password/${resetToken}`;
         const html = `
     <!DOCTYPE html>
     <html>
