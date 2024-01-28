@@ -25,7 +25,10 @@ app.use(mongoSanitize());
 app.use(xss());
 
 app.use((req: Request, res: Response, next: NextFunction) => {
-  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Origin",
+    "https://duke-of-gordon-menu-interface.netlify.app"
+  );
   res.header("Access-Control-Allow-Credentials", "true");
   res.header(
     "Access-Control-Allow-Headers",
