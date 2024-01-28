@@ -41,7 +41,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 // Limit requests from same IP
 const limiter = rateLimit({
   // Max requests from the same IP per time window
-  max: 10000, /// ⚠️ Should be 100 but extended for testing purposes ⚠️
+  max: 100, /// ⚠️ Should be 100 but extended for testing purposes ⚠️
   // WindowM (M for milliseconds), converted to 1 hour
   windowMs: 60 * 60 * 1000,
   // Error Message
