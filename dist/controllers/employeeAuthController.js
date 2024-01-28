@@ -174,8 +174,34 @@ const employeeForgotPassword = async (req, res, next) => {
         const resetToken = employee.createPasswordResetToken();
         await employee.save({ validateBeforeSave: false });
         // 3) Construct reset URL and HTML content with inline CSS
-        const resetUrl = `https://duke-of-gordon-menu-interface.netlify.app/reset-password/${resetToken}`;
-        const html = `
+        let resetUrl, html;
+        if (process.env.NODE_ENV === "development") {
+            resetUrl = `${req.protocol}://localhost:5173/reset-password/${resetToken}`;
+            html = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Password Reset</title>
+        <style>
+            /* Add your CSS here */
+            body { font-family: Arial, sans-serif; line-height: 1.6; }
+            a { color: #007bff; text-decoration: none; }
+            p { color: #555; }
+        </style>
+    </head>
+    <body>
+        <p>Hello,</p>
+        <p>If you requested a password reset, please follow the link below:</p>
+        <a href="${resetUrl}">Reset Your Password</a>
+        <p>If you did not request a password reset, please ignore this email or contact support.</p>
+        <p>Thank you!</p>
+    </body>
+    </html>
+    `;
+        }
+        else {
+            resetUrl = `https://duke-of-gordon-menu-interface.netlify.app/reset-password/${resetToken}`;
+            html = `
     <!DOCTYPE html>
     <html>
     <head>
@@ -195,6 +221,7 @@ const employeeForgotPassword = async (req, res, next) => {
     </body>
     </html>
     `;
+        }
         try {
             await (0, email_1.default)({
                 email: employee.email,
