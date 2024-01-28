@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 dotenv.config({ path: "./config.env" });
 import app from "./app";
 import mongoose from "mongoose";
+import sgMail from "@sendgrid/mail";
 
 process.on("uncaughtException", (err) => {
   console.log(`❗Uncaught Exception! Shutting down!`);
@@ -36,3 +37,5 @@ process.on("unhandledRejection", (err) => {
     process.exit(1);
   });
 });
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY as string);

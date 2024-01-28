@@ -17,6 +17,7 @@
     "@types/node": "^20.10.4"
   },
   "dependencies": {
+    "@sendgrid/mail": "^8.1.0",
     "@types/bcrypt": "^5.0.2",
     "@types/bcryptjs": "^2.4.6",
     "@types/express-mongo-sanitize": "^2.1.0",

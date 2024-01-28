@@ -22,8 +22,14 @@ import {
   deleteMainMenuDessertsItem,
 } from "../controllers/mainMenuController";
 
-//// Get the settings, starters, intermediate, mains and desserts lists from the database
+////////// ******* Online Menu ******* //////////
+//// Get all menus for the online menu (no security required)
 router.route("/get-all-main-menu-data").get(getAllMainMenuData);
+
+////////// ******* Menu Interface Form ******* //////////
+router
+  .route("/get-all-main-menu-data-interface")
+  .get(employeeProtectAndRestrictTo("Manager", "Allowed"), getAllMainMenuData);
 
 //// Main Menu Settings Controllers
 

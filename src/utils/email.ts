@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import sgMail from "@sendgrid/mail";
 
 interface EmailOptions {
   email: string;
@@ -6,28 +7,32 @@ interface EmailOptions {
   html: any;
 }
 
-const sendEmail = async (options: EmailOptions): Promise<void> => {
-  // 1) Create a transporter
-  const transporter = nodemailer.createTransport({
-    host: process.env.EMAIL_HOST,
-    port: Number(process.env.EMAIL_PORT),
-    auth: {
-      user: process.env.EMAIL_USERNAME,
-      pass: process.env.EMAIL_PASSWORD,
-    },
-  });
-  //// May not work in AOL, also this is no good for a production app
-
-  // 2) Define the email options
-  const mailOptions = {
-    from: "No Reply <no-reply@DukeOfGordonHotel.com>",
-    to: options.email,
-    subject: options.subject,
-    html: options.html,
+const sendEmail = async ({
+  email,
+  subject,
+  html,
+}: {
+  email: string;
+  subject: string;
+  html: string;
+}) => {
+  const msg = {
+    to: email, // Change to your recipient
+    from: "donotreply172v@gmx.com", // <----- Verified sender
+    subject: subject,
+    html: html,
   };
 
-  // 3) Actually send the email with nodemailer
-  await transporter.sendMail(mailOptions);
+  try {
+    await sgMail.send(msg);
+    console.log("Email sent");
+  } catch (error: any) {
+    console.error(error);
+
+    if (error.response) {
+      console.error(error.response.body);
+    }
+  }
 };
 
 export default sendEmail;

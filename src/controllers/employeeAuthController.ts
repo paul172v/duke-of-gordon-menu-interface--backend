@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import sgMail from "@sendgrid/mail";
 import crypto from "crypto";
 import dotenv from "dotenv";
 dotenv.config({ path: "./config.env" });
@@ -238,7 +239,6 @@ export const employeeForgotPassword = async (
     <head>
         <title>Password Reset</title>
         <style>
-            /* Add your CSS here */
             body { font-family: Arial, sans-serif; line-height: 1.6; }
             a { color: #007bff; text-decoration: none; }
             p { color: #555; }
