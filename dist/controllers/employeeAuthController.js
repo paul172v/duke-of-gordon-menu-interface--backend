@@ -181,7 +181,6 @@ const employeeForgotPassword = async (req, res, next) => {
     <head>
         <title>Password Reset</title>
         <style>
-            /* Add your CSS here */
             body { font-family: Arial, sans-serif; line-height: 1.6; }
             a { color: #007bff; text-decoration: none; }
             p { color: #555; }

@@ -23,7 +23,7 @@ app.use((0, express_mongo_sanitize_1.default)());
 // Data sanitization against XSS (Cross-Site Scripting Attacks)
 app.use((0, xss_clean_1.default)());
 app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Origin", "https://duke-of-gordon-menu-interface.netlify.app");
     res.header("Access-Control-Allow-Credentials", "true");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
     res.header("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS");

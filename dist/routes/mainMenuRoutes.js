@@ -7,8 +7,13 @@ const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
 const employeeAuthController_1 = require("../controllers/employeeAuthController");
 const mainMenuController_1 = require("../controllers/mainMenuController");
-//// Get the settings, starters, intermediate, mains and desserts lists from the database
+////////// ******* Online Menu ******* //////////
+//// Get all menus for the online menu (no security required)
 router.route("/get-all-main-menu-data").get(mainMenuController_1.getAllMainMenuData);
+////////// ******* Menu Interface Form ******* //////////
+router
+    .route("/get-all-main-menu-data-interface")
+    .get((0, employeeAuthController_1.employeeProtectAndRestrictTo)("Manager", "Allowed"), mainMenuController_1.getAllMainMenuData);
 //// Main Menu Settings Controllers
 /* router.route("/create-main-menu-settings").post(createMainMenuSettings); //// Only needed for initial creation of main menu settings */
 router

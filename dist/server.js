@@ -7,6 +7,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config({ path: "./config.env" });
 const app_1 = __importDefault(require("./app"));
 const mongoose_1 = __importDefault(require("mongoose"));
+const mail_1 = __importDefault(require("@sendgrid/mail"));
 process.on("uncaughtException", (err) => {
     console.log(`❗Uncaught Exception! Shutting down!`);
     console.log(`❌ ${err}`);
@@ -35,3 +36,4 @@ process.on("unhandledRejection", (err) => {
         process.exit(1);
     });
 });
+mail_1.default.setApiKey(process.env.SENDGRID_API_KEY);
