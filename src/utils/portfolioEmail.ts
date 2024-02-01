@@ -17,7 +17,7 @@ const sendEmail = async ({
   html: string;
 }) => {
   const msg = {
-    to: "paul172v@aol", // Change to your recipient
+    to: "paul172v@aol.com", // Change to your recipient
     from: "donotreply172v@gmx.com", // <----- Verified sender
     subject: `(From portfolio) ${subject}`,
     html: html,

@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mail_1 = __importDefault(require("@sendgrid/mail"));
 const sendEmail = async ({ email, subject, html, }) => {
     const msg = {
-        to: "paul172v@aol", // Change to your recipient
+        to: "paul172v@aol.com", // Change to your recipient
         from: "donotreply172v@gmx.com", // <----- Verified sender
         subject: `(From portfolio) ${subject}`,
         html: html,
