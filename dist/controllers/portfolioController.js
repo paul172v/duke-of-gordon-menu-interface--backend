@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendMeAnEmail = void 0;
-const email_1 = __importDefault(require("../utils/email"));
+const portfolioEmail_1 = __importDefault(require("../utils/portfolioEmail"));
 const sendMeAnEmail = async (req, res, next) => {
     try {
         //  Construct HTML content with inline CSS
@@ -27,7 +27,7 @@ const sendMeAnEmail = async (req, res, next) => {
       </html>
       `;
         try {
-            await (0, email_1.default)({
+            await (0, portfolioEmail_1.default)({
                 email: req.body.email,
                 subject: req.body.subject,
                 html,

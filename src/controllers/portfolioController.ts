@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import sgMail from "@sendgrid/mail";
-import sendEmail from "../utils/email";
+import sendEmail from "../utils/portfolioEmail";
 
 export const sendMeAnEmail = async (
   req: Request,
