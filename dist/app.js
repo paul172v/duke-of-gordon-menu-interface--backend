@@ -41,8 +41,10 @@ const limiter = (0, express_rate_limit_1.default)({
 app.use("/api", limiter);
 const employeeRoutes_1 = __importDefault(require("./routes/employeeRoutes"));
 const mainMenuRoutes_1 = __importDefault(require("./routes/mainMenuRoutes"));
+const portfolioRoutes_1 = __importDefault(require("./routes/portfolioRoutes"));
 app.use("/api/v1/employees", employeeRoutes_1.default);
 app.use("/api/v1/main-menu", mainMenuRoutes_1.default);
+app.use("/api/v1/portfolio/", portfolioRoutes_1.default);
 app.all("*", (req, res, next) => {
     next(new appError_1.default(`Can't find ${req.originalUrl} on this server!`, 404));
 });

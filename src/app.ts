@@ -52,8 +52,12 @@ app.use("/api", limiter);
 import employeeRouter from "./routes/employeeRoutes";
 import mainMenuRouter from "./routes/mainMenuRoutes";
 
+import portfolioRouter from "./routes/portfolioRoutes";
+
 app.use("/api/v1/employees", employeeRouter);
 app.use("/api/v1/main-menu", mainMenuRouter);
+
+app.use("/api/v1/portfolio/", portfolioRouter);
 
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
