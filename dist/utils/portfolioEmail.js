@@ -7,7 +7,7 @@ const mail_1 = __importDefault(require("@sendgrid/mail"));
 const sendEmail = async ({ subject, html, }) => {
     const msg = {
         to: "paul172v@aol.co.uk", // Change to your recipient
-        from: "donotreply172v@gmx.com", // <----- Verified sender
+        from: "paul@paul172v-portfolio.co.uk", // <----- Verified sender
         subject: `(From portfolio) ${subject}`,
         html: html,
     };
