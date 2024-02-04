@@ -205,7 +205,7 @@ const employeeForgotPassword = async (req, res, next) => {
     <!DOCTYPE html>
     <html>
     <head>
-        <title>Password Reset</title>
+        <title>Your password reset link (valid for 10mins)</title>
         <style>
             body { font-family: Arial, sans-serif; line-height: 1.6; }
             a { color: #007bff; text-decoration: none; }
@@ -216,7 +216,7 @@ const employeeForgotPassword = async (req, res, next) => {
         <p>Hello,</p>
         <p>If you requested a password reset, please follow the link below:</p>
         <a href="${resetUrl}">Reset Your Password</a>
-        <p>If you did not request a password reset, please ignore this email or contact support.</p>
+        <p>If you did not request a password reset, please ignore this email or contact a manager</p>
         <p>Thank you!</p>
     </body>
     </html>
@@ -225,7 +225,7 @@ const employeeForgotPassword = async (req, res, next) => {
         try {
             await (0, email_1.default)({
                 email: employee.email,
-                subject: "Your password reset token (valid for 10mins)",
+                subject: "Duke of Gordon Menu Interface: Password Reset",
                 html,
             });
             res.status(200).json({
