@@ -59,7 +59,7 @@ app.use("/api/v1/main-menu", mainMenuRouter);
 
 app.use("/api/v1/portfolio/", portfolioRouter);
 
-app.all("*", (req, res, next) => {
+app.all("*", (req: Request, res: Response, next: NextFunction) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
 
